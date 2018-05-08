@@ -4,6 +4,7 @@ using RestSharp;
 using RestSharp.Authenticators;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 
 namespace Twilio
 {
@@ -25,7 +26,15 @@ namespace Twilio
             }).Wait();
 
             JObject jsonResponse = JsonConvert.DeserializeObject<JObject>(response.Content);
-            Console.WriteLine(jsonResponse["messages"]);
+            List<Message> messageList = JsonConvert.DeserializeObject<List<Message>>(jsonResponse["messages"].ToString());
+
+            foreach (Message message in messageList)
+            {
+                Console.WriteLine("To: {0}", message.To);
+                Console.WriteLine("From: {0}", message.From);
+                Console.WriteLine("Body: {0}", message.Body);
+                Console.WriteLine("Status: {0}", message.Status);
+            }
             Console.ReadLine();
         }
 
